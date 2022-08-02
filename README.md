@@ -22,14 +22,14 @@ Features not supported:
 If you would like to use the default options, simply import your configuration like this:
 
 ```
-import config from 'PUT_URL_PATH_HERE/mod.ts';
+import config from 'https://raw.githubusercontent.com/bertrandom/deno-config/1.0/mod.ts';
 ```
 
 And access the config variables using `config.has()` and `config.get()`. Optionally, you can use the shorthand, `config.varname` or `config.nested.varname` but this has no protection for typos.
 
 If you'd like to pass in environment variables via code, for example, if you want to set the NODE_ENV in code, you can do something like this:
 ```
-import { Config } from '../deno-config/config.ts';
+import { Config } from 'https://raw.githubusercontent.com/bertrandom/deno-config/1.0/config.ts';
 const config = await new Config({
     env: {
         "NODE_ENV": "dev",
