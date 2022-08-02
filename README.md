@@ -11,7 +11,6 @@ Features supported:
 * config.has() and config.get()
 
 Features not supported:
-* specifying config directory (It's always `./config`)
 * recursion detection
 * YAML, JS, XML, etc. parsing formats
 * instance names
