@@ -3,7 +3,7 @@ import cloneDeep from 'https://raw.githubusercontent.com/lodash/lodash/4.17.21-e
 import JSON5 from "https://deno.land/x/json5@v1.0.0/mod.ts";
 
 interface ConfigOptions {
-    env?: Env;
+	env?: Env;
 }
 
 interface Env {
@@ -165,13 +165,13 @@ const getImpl = function(object: any, property: any): any {
 
 export class Config {
 
-    __passedEnv: Env | null = null;
+	__passedEnv: Env | null = null;
 
 	constructor(options?: ConfigOptions) {
 
-        Object.defineProperty(this, "__passedEnv", {
-            enumerable : false
-        });
+		Object.defineProperty(this, "__passedEnv", {
+			enumerable : false
+		});
 
 		if (options && options.env) {
 			this.__passedEnv = options.env;
@@ -199,10 +199,10 @@ export class Config {
 
 		for (const nodeEnvVarName of nodeEnvVarNames) {
 
-            if (this.__passedEnv && this.__passedEnv[nodeEnvVarName]) {
-                nodeEnv = this.__passedEnv[nodeEnvVarName];
-                break;
-            }
+			if (this.__passedEnv && this.__passedEnv[nodeEnvVarName]) {
+				nodeEnv = this.__passedEnv[nodeEnvVarName];
+				break;
+			}
 
 			const nodeEnvDesc = { name: "env", variable: nodeEnvVarName } as const;
 			const nodeEnvPerms = await Deno.permissions.query(nodeEnvDesc);
@@ -260,25 +260,25 @@ export class Config {
 
 		}
 
-        let env = null;
+		let env = null;
 
 		const nodeEnvDesc = { name: "env" } as const;
 		const nodeEnvPerms = await Deno.permissions.query(nodeEnvDesc);
 
 		if (nodeEnvPerms.state === "granted") {
-            env = Deno.env.toObject();
-        }
+			env = Deno.env.toObject();
+		}
 
-        if (this.__passedEnv) {
-            if (!env) {
-                env = {};
-            }
-            for (const key in this.__passedEnv) {
-                env[key] = this.__passedEnv[key];
-            }
-        }
+		if (this.__passedEnv) {
+			if (!env) {
+				env = {};
+			}
+			for (const key in this.__passedEnv) {
+				env[key] = this.__passedEnv[key];
+			}
+		}
 
-        if (env) {
+		if (env) {
 
 			allowedFiles = [];
 			for (const extName of extNames) {
@@ -314,7 +314,7 @@ export class Config {
 
 			}
 
-        }
+		}
 
 		return this;
 	}
