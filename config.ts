@@ -4,6 +4,7 @@ import JSON5 from "https://deno.land/x/json5@v1.0.0/mod.ts";
 
 interface ConfigOptions {
 	env?: Env;
+	baseDir?: string;
 }
 
 interface Env {
@@ -165,16 +166,16 @@ const getImpl = function(object: any, property: any): any {
 
 export class Config {
 
-	__passedEnv: Env | null = null;
+	__configOptions: ConfigOptions = {};
 
 	constructor(options?: ConfigOptions) {
 
-		Object.defineProperty(this, "__passedEnv", {
+		Object.defineProperty(this, "__configOptions", {
 			enumerable : false
 		});
 
-		if (options && options.env) {
-			this.__passedEnv = options.env;
+		if (options) {
+			this.__configOptions = options;
 		}
 
 		return (async (): Promise<Config> => {
@@ -182,6 +183,8 @@ export class Config {
 		})() as unknown as Config;
 	}
 	async loadFileConfigs() {
+
+		const baseDir = this.__configOptions?.baseDir || (Deno.cwd() + '/config');
 
 		const configPathReadDesc = { name: "read", path: "config" } as const;
 		let configPathReadPerms = await Deno.permissions.query(configPathReadDesc);
@@ -199,8 +202,8 @@ export class Config {
 
 		for (const nodeEnvVarName of nodeEnvVarNames) {
 
-			if (this.__passedEnv && this.__passedEnv[nodeEnvVarName]) {
-				nodeEnv = this.__passedEnv[nodeEnvVarName];
+			if (this.__configOptions?.env && this.__configOptions?.env[nodeEnvVarName]) {
+				nodeEnv = this.__configOptions?.env[nodeEnvVarName];
 				break;
 			}
 
@@ -239,7 +242,7 @@ export class Config {
 
 		for (const allowedFile of allowedFiles) {
 
-			const filePath = `./config/${allowedFile.fileName}`;
+			const filePath = `${baseDir}/${allowedFile.fileName}`;
 
 			try {
 				const rawFileContents = await Deno.readTextFile(filePath);
@@ -269,12 +272,12 @@ export class Config {
 			env = Deno.env.toObject();
 		}
 
-		if (this.__passedEnv) {
+		if (this.__configOptions?.env) {
 			if (!env) {
 				env = {};
 			}
-			for (const key in this.__passedEnv) {
-				env[key] = this.__passedEnv[key];
+			for (const key in this.__configOptions?.env) {
+				env[key] = this.__configOptions?.env[key];
 			}
 		}
 
@@ -290,7 +293,7 @@ export class Config {
 
 			for (const allowedFile of allowedFiles) {
 
-				const filePath = `./config/${allowedFile.fileName}`;
+				const filePath = `${baseDir}/config/${allowedFile.fileName}`;
 
 				try {
 					const rawFileContents = await Deno.readTextFile(filePath);
