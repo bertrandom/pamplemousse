@@ -50,7 +50,7 @@ $ deno run app.ts
    Allow? [y/n (y = yes allow, n = no deny)]
 ```
 
-If you don't want to grant access to the whole filesystem, you must at least grant access to `.`:
+If you don't want to grant access to the whole filesystem, you must at least grant access to `.` so that it can determine the current working directory:
 ```
 deno run --allow-read=. app.ts
 ```
@@ -66,4 +66,3 @@ Or specific ones:
 ```
 NODE_ENV=staging deno run --allow-env=NODE_ENV --allow-read app.ts
 ```
-
